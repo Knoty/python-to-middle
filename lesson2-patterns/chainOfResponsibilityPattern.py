@@ -91,8 +91,6 @@ def transform_validate(expression):
             'operation': operation.group(),
             'ints': ints
         }
-    else:
-        return None
 
 
 if __name__ == "__main__":
