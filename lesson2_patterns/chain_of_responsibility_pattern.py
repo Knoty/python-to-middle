@@ -2,8 +2,8 @@ import re
 from abc import abstractmethod
 
 
-# Handler interface
 class ArithmeticOperation:
+    """Handler interface"""
     def __init__(self):
         self._next_handler = None
 
@@ -15,11 +15,10 @@ class ArithmeticOperation:
     def calculate(self, expression):
         if self._next_handler:
             return self._next_handler.calculate(expression)
-        return None
 
 
-# Concrete handlers
 class PlusOperation(ArithmeticOperation):
+    """Concrete handlers"""
     def calculate(self, expression):
         if expression['operation'] == '+':
             return expression['ints'][0] + expression['ints'][1]
@@ -46,13 +45,15 @@ class DivideOperation(ArithmeticOperation):
             if expression['ints'][1] != 0:
                 return expression['ints'][0] / expression['ints'][1]
             else:
-                return 'Ошибка: деление на ноль невозможно'
+                raise ZeroDivisionError('Ошибка: деление на ноль невозможно')
         return super().calculate(expression)
 
 
-# Example usage
 def main():
-    # Chain of responsibility
+    """
+    Example usage
+    Chain of responsibility
+    """
     add_handler = PlusOperation()
     minus_handler = MinusOperation()
     multiply_handler = MultiplyOperation()
@@ -66,21 +67,15 @@ def main():
         "7*2",
         "9/3",
         "'operation': '*', 'a': 11, 'b': 2",
-        "10/0",
-        "1001",
-        "10+",
-        "+10",
-        "+++",
-        "ошибка"
     ]
 
-    # Process requests
+    """Process requests"""
     for expression in expressions:
         transformed_exp = transform_validate(expression)
         if transformed_exp:
             print(f"{expression} = {add_handler.calculate(transformed_exp)}")
         else:
-            print('Ошибка: выражение некорректно')
+            raise ValueError('Ошибка: выражение некорректно')
 
 
 def transform_validate(expression):

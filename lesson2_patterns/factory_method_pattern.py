@@ -6,8 +6,8 @@ from abc import (
 )
 
 
-# Creator
 class SongSerializerFactory(ABC):
+    """Creator"""
     @abstractmethod
     def factory_method(self):
         pass
@@ -19,8 +19,8 @@ class SongSerializerFactory(ABC):
         return result
 
 
-# Concrete creators
 class JSONSongSerializer(SongSerializerFactory):
+    """Concrete creators"""
     def factory_method(self):
         return JSONSongData()
 
@@ -30,14 +30,15 @@ class XMLSongSerializer(SongSerializerFactory):
         return XMLSongData()
 
 
-# Abstract product
 class SongSerializer:
+    """Abstract product"""
+    @abstractmethod
     def serialize(self, song):
         pass
 
 
-# Concrete products
 class JSONSongData(SongSerializer):
+    """Concrete products"""
     def serialize(self, song):
         return json.dumps({
             'id': song.song_id,
@@ -56,16 +57,16 @@ class XMLSongData(SongSerializer):
         return ElementTree.tostring(song_info, encoding='unicode')
 
 
-# Client code
 class Song:
+    """Client code"""
     def __init__(self, song_id, title, artist):
         self.song_id = song_id
         self.title = title
         self.artist = artist
 
 
-# Example usage
 def main():
+    """Example usage"""
     song = Song(1, "Imagine", "John Lennon")
     print(JSONSongSerializer().serialize(song))
     print(XMLSongSerializer().serialize(song))
